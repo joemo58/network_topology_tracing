@@ -7,13 +7,13 @@ class Site(models.Model):
         PLANNED = 'PL', 'PLANNED'
         DECOMMISSIONED = 'DE', 'DECOMISSIONED'
 
-    name = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    name = models.CharField(unique=True, primary_key=True)
     description = models.CharField(max_length=70, blank=True, default="")
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.ACTIVE)
 
 
 class Device(models.Model):
-    name = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    name = models.CharField(unique=True, primary_key=True)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     serial_num = models.CharField(max_length=50, unique=True)
 
@@ -29,7 +29,7 @@ class Interface(models.Model):
     speed = models.IntegerField()
     status = models.CharField(max_length=2, choices=Status.choices)
 
-    class META:
+    class Meta:
         constraints = [
             models.UniqueConstraint(
                 name="unique_name",
