@@ -3,9 +3,9 @@ import uuid
 
 class Site(models.Model):
     class Status(models.TextChoices):
-        ACTIVE = 'AC' 'ACTIVE'
-        PLANNED = 'PL' 'PLANNED'
-        DECOMMISSIONED = 'DE' 'DECOMISSIONED'
+        ACTIVE = 'AC', 'ACTIVE'
+        PLANNED = 'PL', 'PLANNED'
+        DECOMMISSIONED = 'DE', 'DECOMISSIONED'
 
     name = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     description = models.CharField(max_length=70, blank=True, default="")
@@ -20,9 +20,9 @@ class Device(models.Model):
 
 class Interface(models.Model):
     class Status(models.TextChoices):
-        UP = 'UP' 'UP'
-        DOWN = 'DO' 'DOWN'
-        MAINTENANCE = 'MA' 'MAINTENANCE'
+        UP = 'UP', 'UP'
+        DOWN = 'DO', 'DOWN'
+        MAINTENANCE = 'MA', 'MAINTENANCE'
 
     name = models.CharField()
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
@@ -40,8 +40,8 @@ class Interface(models.Model):
 
 class Connection(models.Model):
     class Status(models.TextChoices):
-        CONNECTED = 'CON' 'CONNECTED'
-        DISCONNECTED = 'DIS' 'DISCONNECTED'
+        CONNECTED = 'CON', 'CONNECTED'
+        DISCONNECTED = 'DIS', 'DISCONNECTED'
     connection_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=70, blank=True, default="")
     status = models.CharField(max_length=3, choices=Status.choices)
