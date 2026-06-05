@@ -46,5 +46,5 @@ class Connection(models.Model):
     name = models.CharField(max_length=70, blank=True, default="")
     status = models.CharField(max_length=3, choices=Status.choices)
     # prevent deleting Devices/Interfaces while Interface is part of a connection
-    start_interface = models.ForeignKey(Interface, on_delete=models.PROTECT)
-    end_interface = models.ForeignKey(Interface, on_delete=models.PROTECT)
+    start_interface = models.ForeignKey(Interface, related_name='connection_starts', on_delete=models.PROTECT)
+    end_interface = models.ForeignKey(Interface, related_name='connection_ends', on_delete=models.PROTECT)
