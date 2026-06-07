@@ -12,12 +12,16 @@ Install dependencies
 For Windows installation, follow this guide to install deps from requirements.txt: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
 
 # Running The App 
+
 From the network_tracer directory:
-**Seeding the DB**: `python manage.py seed`
+
+**Run Migrations**
+`python manage.py makemigrations api && python manage.py migrate api`
+
+**Seed the DB**: `python manage.py seed`
 
 **Run the Development Server**: `python manage.py runserver`
 
-**Run containerised deployment**: ``
 
 # Running Tests
 From the network_tracer directory:
@@ -34,9 +38,12 @@ From the network_tracer directory:
 - When Site deleted, delete all devices associated with it as we won't need them anymore
 - Interfaces can create a connection to themselves (loopback)
 - This system isn't ready for deployment and is just an implementaiton of the API and business logic. 
+    - no real db setup (SQLite only)
+    - no production server (UVIcorn etc.) setup
+    - no containerisation in place
 
 # High-Level Design
-# Data Model
+## Data Model
 Data model below was generated using the following command:
 `python manage.py generate_erd --format mermaid --output schema.md`
 
