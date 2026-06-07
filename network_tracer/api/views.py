@@ -2,7 +2,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from network_tracer.api.repository import ElementNotFound, connections_for_device, connections_for_interface, connections_for_site
+from api.repository import ElementNotFound, connections_for_device, connections_for_interface, connections_for_site
 from api.models import Connection, Device, Interface, Site
 from api.serializers import ConnectionSerializer, DeviceSerializer, InterfaceSerializer, SiteSerializer
 
