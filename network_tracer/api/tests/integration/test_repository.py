@@ -23,7 +23,7 @@ def make_connection(start, end, conn_id='CONN-001', status='CON'):
 
 
 class ConnectionsForInterfaceTest(TestCase):
-    def setUp(self):business logic-le
+    def setUp(self):
         site = make_site()
         device = make_device(site)
         self.iface_a = make_interface(device, name='eth0')

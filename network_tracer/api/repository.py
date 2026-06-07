@@ -7,12 +7,17 @@ class ElementNotFound(Exception):
     pass
 
 
+_CONNECTION_RELATED = ('start_target__device__site', 'end_target__device__site')
+
+
 def connections_for_interface(interface_id: int) -> QuerySet:
     try:
         interface = Interface.objects.get(pk=interface_id)
     except Interface.DoesNotExist:
         raise ElementNotFound(f"Interface {interface_id} not found.")
-    return Connection.objects.filter(Q(start_target=interface) | Q(end_target=interface))
+    return Connection.objects.select_related(*_CONNECTION_RELATED).filter(
+        Q(start_target=interface) | Q(end_target=interface)
+    )
 
 
 def connections_for_device(device_id: int) -> QuerySet:
@@ -20,7 +25,7 @@ def connections_for_device(device_id: int) -> QuerySet:
         device = Device.objects.get(pk=device_id)
     except Device.DoesNotExist:
         raise ElementNotFound(f"Device {device_id} not found.")
-    return Connection.objects.filter(
+    return Connection.objects.select_related(*_CONNECTION_RELATED).filter(
         Q(start_target__device=device) | Q(end_target__device=device)
     )
 
@@ -30,6 +35,6 @@ def connections_for_site(site_id: int) -> QuerySet:
         site = Site.objects.get(pk=site_id)
     except Site.DoesNotExist:
         raise ElementNotFound(f"Site {site_id} not found.")
-    return Connection.objects.filter(
+    return Connection.objects.select_related(*_CONNECTION_RELATED).filter(
         Q(start_target__device__site=site) | Q(end_target__device__site=site)
     )

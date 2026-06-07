@@ -14,12 +14,12 @@ class SiteViewSet(viewsets.ModelViewSet):
 
 
 class DeviceViewSet(viewsets.ModelViewSet):
-    queryset = Device.objects.order_by('pk')
+    queryset = Device.objects.select_related('site').order_by('pk')
     serializer_class = DeviceSerializer
 
 
 class InterfaceViewSet(viewsets.ModelViewSet):
-    queryset = Interface.objects.order_by('pk')
+    queryset = Interface.objects.select_related('device').order_by('pk')
     serializer_class = InterfaceSerializer
 
     def destroy(self, request, *args, **kwargs):
@@ -33,7 +33,10 @@ class InterfaceViewSet(viewsets.ModelViewSet):
 
 
 class ConnectionViewSet(viewsets.ModelViewSet):
-    queryset = Connection.objects.order_by('pk')
+    queryset = Connection.objects.select_related(
+        'start_target__device__site',
+        'end_target__device__site',
+    ).order_by('pk')
     serializer_class = ConnectionSerializer
 
 
