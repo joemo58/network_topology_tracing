@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from api.views import ConnectionViewSet, DeviceViewSet, InterfaceViewSet, SiteViewSet
+from api.views import ConnectionViewSet, DeviceViewSet, InterfaceViewSet, SiteViewSet, trace_connections
 
 router = DefaultRouter()
 router.register(r'sites', SiteViewSet)
@@ -28,4 +28,5 @@ router.register(r'connections', ConnectionViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('trace/', trace_connections, name='trace-connections'),
 ]
