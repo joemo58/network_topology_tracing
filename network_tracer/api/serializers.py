@@ -24,26 +24,26 @@ class ConnectionEndpointSerializer(serializers.Serializer):
     device = serializers.CharField()
     interface = serializers.CharField()
 
-    def to_representation(self, obj):  # obj is an Interface instance on read
+    def to_representation(self, instance) -> dict:  # obj is an Interface instance on read
         return {
-            "site": {"id": obj.device.site.id, "name": obj.device.site.name},
-            "device": {"id": obj.device.id, "name": obj.device.name},
-            "interface": {"id": obj.id, "name": obj.name},
+            "site": {"id": instance.device.site.id, "name": instance.device.site.name},
+            "device": {"id": instance.device.id, "name": instance.device.name},
+            "interface": {"id": instance.id, "name": instance.name},
         }
 
-    def validate(self, data):
+    def validate(self, attrs) -> dict:
         try:
             interface = Interface.objects.get(
-                name=data["interface"],
-                device__name=data["device"],
-                device__site__name=data["site"],
+                name=attrs["interface"],
+                device__name=attrs["device"],
+                device__site__name=attrs["site"],
             )
         except Interface.DoesNotExist:
             raise serializers.ValidationError(
-                f"No interface '{data['interface']}' on device '{data['device']}' at site '{data['site']}'"
+                f"No interface '{attrs['interface']}' on device '{attrs['device']}' at site '{attrs['site']}'"
             )
-        data["_resolved"] = interface
-        return data
+        attrs["_resolved"] = interface
+        return attrs
 
 
 class ConnectionSerializer(serializers.HyperlinkedModelSerializer):
