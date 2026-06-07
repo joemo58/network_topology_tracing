@@ -34,7 +34,7 @@ class SiteViewSetTest(APITestCase):
     def test_list_sites(self):
         response = self.client.get('/sites/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        names = [s['name'] for s in response.data]
+        names = [s['name'] for s in response.data['results']]
         self.assertIn('Site A', names)
 
     def test_retrieve_site(self):
@@ -78,7 +78,7 @@ class DeviceViewSetTest(APITestCase):
     def test_list_devices(self):
         response = self.client.get('/devices/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        names = [d['name'] for d in response.data]
+        names = [d['name'] for d in response.data['results']]
         self.assertIn('Router-1', names)
 
     def test_retrieve_device(self):
@@ -127,7 +127,7 @@ class InterfaceViewSetTest(APITestCase):
     def test_list_interfaces(self):
         response = self.client.get('/interfaces/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        names = [i['name'] for i in response.data]
+        names = [i['name'] for i in response.data['results']]
         self.assertIn('eth0', names)
 
     def test_retrieve_interface(self):
@@ -174,7 +174,7 @@ class ConnectionViewSetTest(APITestCase):
     def test_list_connections(self):
         response = self.client.get('/connections/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        ids = [c['connection_id'] for c in response.data]
+        ids = [c['connection_id'] for c in response.data['results']]
         self.assertIn('CONN-001', ids)
 
     def test_retrieve_connection(self):

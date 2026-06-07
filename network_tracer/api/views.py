@@ -9,17 +9,17 @@ from api.serializers import ConnectionSerializer, DeviceSerializer, InterfaceSer
 
 
 class SiteViewSet(viewsets.ModelViewSet):
-    queryset = Site.objects.all()
+    queryset = Site.objects.order_by('pk')
     serializer_class = SiteSerializer
 
 
 class DeviceViewSet(viewsets.ModelViewSet):
-    queryset = Device.objects.all()
+    queryset = Device.objects.order_by('pk')
     serializer_class = DeviceSerializer
 
 
 class InterfaceViewSet(viewsets.ModelViewSet):
-    queryset = Interface.objects.all()
+    queryset = Interface.objects.order_by('pk')
     serializer_class = InterfaceSerializer
 
     def destroy(self, request, *args, **kwargs):
@@ -33,7 +33,7 @@ class InterfaceViewSet(viewsets.ModelViewSet):
 
 
 class ConnectionViewSet(viewsets.ModelViewSet):
-    queryset = Connection.objects.all()
+    queryset = Connection.objects.order_by('pk')
     serializer_class = ConnectionSerializer
 
 
