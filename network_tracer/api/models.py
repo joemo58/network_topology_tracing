@@ -7,13 +7,13 @@ class Site(models.Model):
         PLANNED = 'PL', 'PLANNED'
         DECOMMISSIONED = 'DE', 'DECOMISSIONED'
 
-    name = models.CharField(unique=True, primary_key=True)
+    name = models.CharField(unique=True)
     description = models.CharField(max_length=70, blank=True, default="")
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.ACTIVE)
 
 
 class Device(models.Model):
-    name = models.CharField(unique=True, primary_key=True)
+    name = models.CharField(unique=True)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
     serial_num = models.CharField(max_length=50, unique=True)
 
@@ -42,9 +42,9 @@ class Connection(models.Model):
     class Status(models.TextChoices):
         CONNECTED = 'CON', 'CONNECTED'
         DISCONNECTED = 'DIS', 'DISCONNECTED'
-    connection_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=70, blank=True, default="")
     status = models.CharField(max_length=3, choices=Status.choices)
     # prevent deleting Devices/Interfaces while Interface is part of a connection
     start_interface = models.ForeignKey(Interface, related_name='connection_starts', on_delete=models.PROTECT)
     end_interface = models.ForeignKey(Interface, related_name='connection_ends', on_delete=models.PROTECT)
+
