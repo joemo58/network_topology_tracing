@@ -37,7 +37,7 @@ From the network_tracer directory:
 
 # High-Level Design
 # Data Model
-```
+```mermaid
 erDiagram
 LogEntry {
   integer id pk
