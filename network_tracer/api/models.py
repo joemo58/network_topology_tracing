@@ -42,9 +42,11 @@ class Connection(models.Model):
     class Status(models.TextChoices):
         CONNECTED = 'CON', 'CONNECTED'
         DISCONNECTED = 'DIS', 'DISCONNECTED'
+
+    connection_id  = models.CharField(unique=True, primary_key=True)
     name = models.CharField(max_length=70, blank=True, default="")
     status = models.CharField(max_length=3, choices=Status.choices)
     # prevent deleting Devices/Interfaces while Interface is part of a connection
-    start_interface = models.ForeignKey(Interface, related_name='connection_starts', on_delete=models.PROTECT)
-    end_interface = models.ForeignKey(Interface, related_name='connection_ends', on_delete=models.PROTECT)
+    start_target = models.ForeignKey(Interface, related_name='connection_starts', on_delete=models.PROTECT)
+    end_target = models.ForeignKey(Interface, related_name='connection_ends', on_delete=models.PROTECT)
 

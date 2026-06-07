@@ -20,9 +20,18 @@ class InterfaceSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ConnectionEndpointSerializer(serializers.Serializer):
-    site = serializers.CharField()
-    device = serializers.CharField()
-    interface = serializers.CharField()
+    site = serializers.SerializerMethodField()
+    device = serializers.SerializerMethodField()
+    interface = serializers.SerializerMethodField()
+
+    def get_site(self, obj):  # obj is an Interface instance
+        return {"id": obj.device.id, "name": obj.device.site.name}
+
+    def get_device(self, obj):
+        return {"id": obj.device.id, "name": obj.device.name}
+
+    def get_interface(self, obj):
+        return {"id": str(obj.id), "name": obj.name}
 
     def validate(self, data):
         try:
@@ -40,25 +49,25 @@ class ConnectionEndpointSerializer(serializers.Serializer):
 
 
 class ConnectionSerializer(serializers.HyperlinkedModelSerializer):
-    start = ConnectionEndpointSerializer(write_only=True)
-    end = ConnectionEndpointSerializer(write_only=True)
+    start_target = ConnectionEndpointSerializer()
+    end_target = ConnectionEndpointSerializer()
 
     class Meta:
         model = Connection
-        fields = ["url", "connection_id", "name", "status", "start", "end",
-                  "start_interface", "end_interface"]
-        read_only_fields = ["connection_id", "start_interface", "end_interface"]
+        fields = ["url", "connection_id", "name", "status",
+                  "start_target", "end_target"]
+        read_only_fields = ["connection_id", "start_target", "end_target"]
 
     def create(self, validated_data):
-        start_iface = validated_data.pop("start")["_resolved"]
-        end_iface = validated_data.pop("end")["_resolved"]
+        start_target = validated_data.pop("start_target")["_resolved"]
+        end_iface = validated_data.pop("end_target")["_resolved"]
         return Connection.objects.create(
-            start_interface=start_iface, end_interface=end_iface, **validated_data
+            start_target=start_target, end_target=end_iface, **validated_data
         )
 
     def update(self, instance, validated_data):
         if "start" in validated_data:
-            instance.start_interface = validated_data.pop("start")["_resolved"]
+            instance.start_target = validated_data.pop("start_target")["_resolved"]
         if "end" in validated_data:
-            instance.end_interface = validated_data.pop("end")["_resolved"]
+            instance.end_target = validated_data.pop("end_target")["_resolved"]
         return super().update(instance, validated_data)
