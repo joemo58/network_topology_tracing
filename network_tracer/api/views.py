@@ -1,3 +1,4 @@
+from django.db.models import ProtectedError
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -20,6 +21,15 @@ class DeviceViewSet(viewsets.ModelViewSet):
 class InterfaceViewSet(viewsets.ModelViewSet):
     queryset = Interface.objects.all()
     serializer_class = InterfaceSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            return super().destroy(request, *args, **kwargs)
+        except ProtectedError:
+            return Response(
+                {"error": "Cannot delete an interface that is part of a connection."},
+                status=status.HTTP_409_CONFLICT,
+            )
 
 
 class ConnectionViewSet(viewsets.ModelViewSet):
