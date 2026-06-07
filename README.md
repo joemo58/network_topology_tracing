@@ -37,7 +37,7 @@ From the network_tracer directory:
 
 # High-Level Design
 # Data Model
-
+```
 erDiagram
 LogEntry {
   integer id pk
@@ -117,6 +117,7 @@ LogEntry }|--|| User: ""
 LogEntry }|--|| ContentType: ""
 User }|--|{ Permission: ""
 Permission }|--|| ContentType: ""
+```
 
 ## Project Structure
 ```
