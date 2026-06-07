@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from api.models import Connection, Device, Interface, Site
 from api.serializers import ConnectionSerializer, DeviceSerializer, InterfaceSerializer, SiteSerializer
-
+from rest_framework.decorators import action
 
 class SiteViewSet(viewsets.ModelViewSet):
     queryset = Site.objects.all()
@@ -21,3 +21,6 @@ class InterfaceViewSet(viewsets.ModelViewSet):
 class ConnectionViewSet(viewsets.ModelViewSet):
     queryset = Connection.objects.all()
     serializer_class = ConnectionSerializer
+
+# custom endpoint here
+# query params: type + id

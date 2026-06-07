@@ -20,18 +20,16 @@ class InterfaceSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ConnectionEndpointSerializer(serializers.Serializer):
-    site = serializers.SerializerMethodField()
-    device = serializers.SerializerMethodField()
-    interface = serializers.SerializerMethodField()
+    site = serializers.CharField()
+    device = serializers.CharField()
+    interface = serializers.CharField()
 
-    def get_site(self, obj):  # obj is an Interface instance
-        return {"id": obj.device.id, "name": obj.device.site.name}
-
-    def get_device(self, obj):
-        return {"id": obj.device.id, "name": obj.device.name}
-
-    def get_interface(self, obj):
-        return {"id": str(obj.id), "name": obj.name}
+    def to_representation(self, obj):  # obj is an Interface instance on read
+        return {
+            "site": {"id": obj.device.site.id, "name": obj.device.site.name},
+            "device": {"id": obj.device.id, "name": obj.device.name},
+            "interface": {"id": obj.id, "name": obj.name},
+        }
 
     def validate(self, data):
         try:
@@ -56,18 +54,17 @@ class ConnectionSerializer(serializers.HyperlinkedModelSerializer):
         model = Connection
         fields = ["url", "connection_id", "name", "status",
                   "start_target", "end_target"]
-        read_only_fields = ["connection_id", "start_target", "end_target"]
 
     def create(self, validated_data):
-        start_target = validated_data.pop("start_target")["_resolved"]
-        end_iface = validated_data.pop("end_target")["_resolved"]
+        start_interface = validated_data.pop("start_target")["_resolved"]
+        end_interface = validated_data.pop("end_target")["_resolved"]
         return Connection.objects.create(
-            start_target=start_target, end_target=end_iface, **validated_data
+            start_target=start_interface, end_target=end_interface, **validated_data
         )
 
     def update(self, instance, validated_data):
-        if "start" in validated_data:
+        if "start_target" in validated_data:
             instance.start_target = validated_data.pop("start_target")["_resolved"]
-        if "end" in validated_data:
+        if "end_target" in validated_data:
             instance.end_target = validated_data.pop("end_target")["_resolved"]
         return super().update(instance, validated_data)
