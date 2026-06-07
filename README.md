@@ -37,51 +37,11 @@ From the network_tracer directory:
 
 # High-Level Design
 # Data Model
+Data model below was generated using the following command:
+`python manage.py generate_erd --format mermaid --output schema.md`
+
 ```mermaid
 erDiagram
-LogEntry {
-  integer id pk
-  text action_time 
-  integer user_id 
-  integer content_type_id 
-  text object_id 
-  varchar object_repr 
-  smallint_unsigned action_flag 
-  text change_message 
-}
-Permission {
-  integer id pk
-  varchar name 
-  integer content_type_id 
-  varchar codename 
-}
-Group {
-  integer id pk
-  varchar name 
-}
-User {
-  integer id pk
-  varchar password 
-  text last_login 
-  bool is_superuser 
-  varchar username 
-  varchar first_name 
-  varchar last_name 
-  varchar email 
-  bool is_staff 
-  bool is_active 
-  text date_joined 
-}
-ContentType {
-  integer id pk
-  varchar app_label 
-  varchar model 
-}
-Session {
-  varchar session_key pk
-  text session_data 
-  text expire_date 
-}
 Site {
   integer id pk
   text name 
@@ -111,12 +71,6 @@ Connection {
 Device }|--|| Site: ""
 Interface }|--|| Device: ""
 Connection }|--|| Interface: ""
-Group }|--|{ User: ""
-Group }|--|{ Permission: ""
-LogEntry }|--|| User: ""
-LogEntry }|--|| ContentType: ""
-User }|--|{ Permission: ""
-Permission }|--|| ContentType: ""
 ```
 
 ## Project Structure
